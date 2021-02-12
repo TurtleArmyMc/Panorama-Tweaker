@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.turtlearmymc.panoramatweaker.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [],
+  "client": [
+    "RotatingCubeMapRendererMixin"
+  ],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

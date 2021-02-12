@@ -1,0 +1,9 @@
+{
+    "panorama_tweaker.title" : "Panorama Settings",
+    "panorama_tweaker.rotationSpeed" : "Rotation Speed",
+    "panorama_tweaker.startingHorizontalAngle" : "Starting horizontal angle",
+    "panorama_tweaker.verticalAngle" : "Vertical Angle",
+    "panorama_tweaker.swayAngle" : "Sway Angle",
+    "panorama_tweaker.swaySpeed" : "Sway Speed",
+    "panorama_tweaker.initialSwayProgress" : "Initial Sway Progress"
+}

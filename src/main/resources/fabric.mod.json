@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "panorama_tweaker",
+  "version": "${version}",
+  "name": "Panorama Tweaker",
+  "description": "Allows customization of the main menu panorama.",
+  "authors": [
+    "TurtleArmyMc"
+  ],
+  "contributors": [],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/panorama-tweaker",
+    "sources": "https://github.com/TurtleArmyMc/Panorama-Tweaker",
+    "issues": "https://github.com/shedaniel/Panorama-Tweaker/issues"
+  },
+  "license": "LGPL-3.0",
+  "icon": "assets/panorama_tweaker/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.turtlearmymc.panoramatweaker.PanoramaTweaker"
+    ],
+    "modmenu": [
+      "com.turtlearmymc.panoramatweaker.ModMenuApiImpl"
+    ]
+  },
+  "mixins": [
+    "panorama_tweaker.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.1"
+  },
+  "custom": {
+    "modmenu:clientsideOnly": true
+  }
+}
