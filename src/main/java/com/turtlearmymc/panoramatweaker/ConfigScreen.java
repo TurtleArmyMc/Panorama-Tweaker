@@ -17,7 +17,9 @@ import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.MathHelper;
 
@@ -39,14 +41,14 @@ public class ConfigScreen extends Screen {
         final int y_padding = 28;
 
         this.addButton(new ButtonWidget(this.width / 2 - 154, this.height - y_padding, 150, 20,
-                I18n.translate("gui.cancel"), (button) -> {
+                new TranslatableText("gui.cancel"), (button) -> {
                     this.restoreConfig();
-                    minecraft.openScreen(parent);
+                    client.openScreen(parent);
                 }));
         this.addButton(new ButtonWidget(this.width / 2 + 4, this.height - y_padding, 150, 20,
-                I18n.translate("gui.done"), (button) -> {
+                new TranslatableText("gui.done"), (button) -> {
                     this.saveConfig();
-                    minecraft.openScreen(parent);
+                    client.openScreen(parent);
                 }));
 
         final int widgetCount = 6;
@@ -55,42 +57,46 @@ public class ConfigScreen extends Screen {
         int x = (this.width / 2) - 154;
         int y = ((this.height - widgetPadding) * 0) / widgetCount + y_padding;
 
-        this.children.addAll((new OptionWidget(this.font, I18n.translate("panorama_tweaker.rotationSpeed"), x, y, 308,
-                20, Config.DEFAULT_ROTATION_SPEED, PanoramaTweaker.config.rotationSpeed, -10, 10,
-                val -> PanoramaTweaker.config.rotationSpeed = val)).children());
+        this.children
+                .addAll((new OptionWidget(this.textRenderer, new TranslatableText("panorama_tweaker.rotationSpeed"), x,
+                        y, 308, 20, Config.DEFAULT_ROTATION_SPEED, PanoramaTweaker.config.rotationSpeed, -10, 10,
+                        val -> PanoramaTweaker.config.rotationSpeed = val)).children());
 
         y = ((this.height - widgetPadding) * 1) / widgetCount + y_padding;
-        this.children.addAll((new OptionWidget(this.font, I18n.translate("panorama_tweaker.startingHorizontalAngle"), x,
-                y, 308, 20, Config.DEFAULT_STARTING_HORIZONTAL_ANGLE, PanoramaTweaker.config.startingHorizontalAngle,
-                -180, 180, val -> PanoramaTweaker.config.startingHorizontalAngle = val)).children());
+        this.children.addAll((new OptionWidget(this.textRenderer,
+                new TranslatableText("panorama_tweaker.startingHorizontalAngle"), x, y, 308, 20,
+                Config.DEFAULT_STARTING_HORIZONTAL_ANGLE, PanoramaTweaker.config.startingHorizontalAngle, -180, 180,
+                val -> PanoramaTweaker.config.startingHorizontalAngle = val)).children());
 
         y = ((this.height - widgetPadding) * 2) / widgetCount + y_padding;
-        this.children.addAll((new OptionWidget(this.font, I18n.translate("panorama_tweaker.verticalAngle"), x, y, 308,
-                20, Config.DEFAULT_VERTICAL_ANGLE, PanoramaTweaker.config.verticalAngle, -90, 90,
-                val -> PanoramaTweaker.config.verticalAngle = val)).children());
+        this.children
+                .addAll((new OptionWidget(this.textRenderer, new TranslatableText("panorama_tweaker.verticalAngle"), x,
+                        y, 308, 20, Config.DEFAULT_VERTICAL_ANGLE, PanoramaTweaker.config.verticalAngle, -90, 90,
+                        val -> PanoramaTweaker.config.verticalAngle = val)).children());
 
         y = ((this.height - widgetPadding) * 3) / widgetCount + y_padding;
-        this.children.addAll((new OptionWidget(this.font, I18n.translate("panorama_tweaker.swayAngle"), x, y, 308, 20,
-                Config.DEFAULT_SWAY_ANGLE, PanoramaTweaker.config.swayAngle, -90, 90,
+        this.children.addAll((new OptionWidget(this.textRenderer, new TranslatableText("panorama_tweaker.swayAngle"), x,
+                y, 308, 20, Config.DEFAULT_SWAY_ANGLE, PanoramaTweaker.config.swayAngle, -90, 90,
                 val -> PanoramaTweaker.config.swayAngle = val)).children());
 
         y = ((this.height - widgetPadding) * 4) / widgetCount + y_padding;
-        this.children.addAll((new OptionWidget(this.font, I18n.translate("panorama_tweaker.swaySpeed"), x, y, 308, 20,
-                Config.DEFAULT_SWAY_SPEED, PanoramaTweaker.config.swaySpeed, 0, 10,
+        this.children.addAll((new OptionWidget(this.textRenderer, new TranslatableText("panorama_tweaker.swaySpeed"), x,
+                y, 308, 20, Config.DEFAULT_SWAY_SPEED, PanoramaTweaker.config.swaySpeed, 0, 10,
                 val -> PanoramaTweaker.config.swaySpeed = val)).children());
 
         y = ((this.height - widgetPadding) * 5) / widgetCount + y_padding;
-        this.children.addAll((new OptionWidget(this.font, I18n.translate("panorama_tweaker.initialSwayProgress"), x, y,
-                308, 20, Config.DEFAULT_INITIAL_SWAY_PROGRESS, PanoramaTweaker.config.initialSwayProgress, -1, 1,
-                val -> PanoramaTweaker.config.initialSwayProgress = val)).children());
+        this.children.addAll(
+                (new OptionWidget(this.textRenderer, new TranslatableText("panorama_tweaker.initialSwayProgress"), x, y,
+                        308, 20, Config.DEFAULT_INITIAL_SWAY_PROGRESS, PanoramaTweaker.config.initialSwayProgress, -1,
+                        1, val -> PanoramaTweaker.config.initialSwayProgress = val)).children());
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float delta) {
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.backgroundRenderer.render(delta, MathHelper.clamp(1, 0.0F, 1.0F));
         for (Element child : this.children) {
             if (child instanceof Drawable) {
-                ((Drawable) child).render(mouseX, mouseY, delta);
+                ((Drawable) child).render(matrices, mouseX, mouseY, delta);
             }
         }
     }
@@ -127,16 +133,16 @@ public class ConfigScreen extends Screen {
 
         private double value;
 
-        public OptionWidget(TextRenderer font, String label, int x, int y, int width, int height, double defaultVal,
-                double progress, double scaledMin, double scaledMax, Consumer<Float> setter) {
+        public OptionWidget(TextRenderer font, TranslatableText text, int x, int y, int width, int height,
+                double defaultVal, double progress, double scaledMin, double scaledMax, Consumer<Float> setter) {
             this.defaultVal = defaultVal;
             this.value = progress;
 
             this.setter = setter;
 
-            this.slider = new OptionSlider(label, x, y, width - 110, height, progress, scaledMin, scaledMax,
+            this.slider = new OptionSlider(text, x, y, width - 110, height, progress, scaledMin, scaledMax,
                     (val) -> this.setValue(val));
-            this.textField = new TextFieldWidget(font, x + width - 105, y, 50, height, "");
+            this.textField = new TextFieldWidget(font, x + width - 105, y, 50, height, text);
             this.textField.setText("" + (Math.round(this.value * 100) / 100d));
             this.textField.setEditable(true);
             this.textField.setChangedListener((val) -> {
@@ -153,7 +159,7 @@ public class ConfigScreen extends Screen {
                 }
             });
             this.setFocused(this.textField);
-            this.resetButton = new ButtonWidget(x + width - 50, y, 50, height, I18n.translate("controls.reset"),
+            this.resetButton = new ButtonWidget(x + width - 50, y, 50, height, new TranslatableText("controls.reset"),
                     (buttonWidget) -> {
                         this.resetToDefault();
                     });
@@ -193,17 +199,18 @@ public class ConfigScreen extends Screen {
         }
 
         protected class OptionSlider extends SliderWidget {
-            protected final String label;
+            protected final MutableText text;
             protected final double scaledMin;
             protected final double scaledMax;
             protected final double scaledRange;
             protected final Consumer<Double> onUpdate;
             protected double scaledValue;
 
-            public OptionSlider(String label, int x, int y, int width, int height, double progress, double scaledMin,
-                    double scaledMax, Consumer<Double> onUpdate) {
-                super(x, y, width, height, MathHelper.clamp(((progress - scaledMin) / (scaledMax - scaledMin)), 0, 1));
-                this.label = label;
+            public OptionSlider(MutableText text, int x, int y, int width, int height, double progress,
+                    double scaledMin, double scaledMax, Consumer<Double> onUpdate) {
+                super(x, y, width, height, LiteralText.EMPTY,
+                        MathHelper.clamp(((progress - scaledMin) / (scaledMax - scaledMin)), 0, 1));
+                this.text = text;
                 this.scaledMin = scaledMin;
                 this.scaledMax = scaledMax;
                 this.scaledRange = scaledMax - scaledMin;
@@ -220,7 +227,7 @@ public class ConfigScreen extends Screen {
 
             @Override
             protected void updateMessage() {
-                this.setMessage(this.label + ": " + (Math.round(this.scaledValue * 10) / 10d));
+                this.setMessage(this.text.copy().append(": " + (Math.round(this.scaledValue * 10) / 10d)));
             }
 
             @Override

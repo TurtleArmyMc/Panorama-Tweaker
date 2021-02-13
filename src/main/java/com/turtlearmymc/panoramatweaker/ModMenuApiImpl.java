@@ -7,11 +7,6 @@ import net.minecraft.client.gui.screen.Screen;
 
 public class ModMenuApiImpl implements ModMenuApi {
     @Override
-    public String getModId() {
-        return PanoramaTweaker.MOD_ID;
-    }
-
-    @Override
     public Function<Screen, ? extends Screen> getConfigScreenFactory() {
         return ConfigScreen::new;
     }
