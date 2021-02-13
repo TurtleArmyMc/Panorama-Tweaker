@@ -4,3 +4,6 @@ A mod that allows for customization of the main menu panorama.
 
 ## Curseforge
 [Curseforge page](https://www.curseforge.com/minecraft/mc-mods/panorama-tweaker)
+
+## Modrinth
+[Modrinth page](https://modrinth.com/mod/panorama-tweaker)
