@@ -1,13 +1,10 @@
 package com.turtlearmymc.panoramatweaker;
 
-import java.util.function.Function;
-
-import io.github.prospector.modmenu.api.ModMenuApi;
-import net.minecraft.client.gui.screen.Screen;
+import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
 
 public class ModMenuApiImpl implements ModMenuApi {
-    @Override
-    public Function<Screen, ? extends Screen> getConfigScreenFactory() {
+    public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return ConfigScreen::new;
     }
 }

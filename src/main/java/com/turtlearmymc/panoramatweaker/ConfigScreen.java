@@ -7,14 +7,13 @@ import java.util.function.Consumer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.AbstractParentElement;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.RotatingCubeMapRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
-import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -40,12 +39,12 @@ public class ConfigScreen extends Screen {
     protected void init() {
         final int y_padding = 28;
 
-        this.addButton(new ButtonWidget(this.width / 2 - 154, this.height - y_padding, 150, 20,
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 154, this.height - y_padding, 150, 20,
                 new TranslatableText("gui.cancel"), (button) -> {
                     this.restoreConfig();
                     client.openScreen(parent);
                 }));
-        this.addButton(new ButtonWidget(this.width / 2 + 4, this.height - y_padding, 150, 20,
+        this.addDrawableChild(new ButtonWidget(this.width / 2 + 4, this.height - y_padding, 150, 20,
                 new TranslatableText("gui.done"), (button) -> {
                     this.saveConfig();
                     client.openScreen(parent);
@@ -57,44 +56,57 @@ public class ConfigScreen extends Screen {
         int x = (this.width / 2) - 154;
         int y = ((this.height - widgetPadding) * 0) / widgetCount + y_padding;
 
-        this.children
-                .addAll((new OptionWidget(this.textRenderer, new TranslatableText("panorama_tweaker.rotationSpeed"), x,
-                        y, 308, 20, Config.DEFAULT_ROTATION_SPEED, PanoramaTweaker.config.rotationSpeed, -10, 10,
-                        val -> PanoramaTweaker.config.rotationSpeed = val)).children());
+        for (ClickableWidget child : (new OptionWidget(this.textRenderer,
+                new TranslatableText("panorama_tweaker.rotationSpeed"), x, y, 308, 20, Config.DEFAULT_ROTATION_SPEED,
+                PanoramaTweaker.config.rotationSpeed, -10, 10, val -> PanoramaTweaker.config.rotationSpeed = val))
+                        .children()) {
+            this.addDrawableChild(child);
+        }
 
         y = ((this.height - widgetPadding) * 1) / widgetCount + y_padding;
-        this.children.addAll((new OptionWidget(this.textRenderer,
+        for (ClickableWidget child : ((new OptionWidget(this.textRenderer,
                 new TranslatableText("panorama_tweaker.startingHorizontalAngle"), x, y, 308, 20,
                 Config.DEFAULT_STARTING_HORIZONTAL_ANGLE, PanoramaTweaker.config.startingHorizontalAngle, -180, 180,
-                val -> PanoramaTweaker.config.startingHorizontalAngle = val)).children());
+                val -> PanoramaTweaker.config.startingHorizontalAngle = val)).children())) {
+            this.addDrawableChild(child);
+        }
 
         y = ((this.height - widgetPadding) * 2) / widgetCount + y_padding;
-        this.children
-                .addAll((new OptionWidget(this.textRenderer, new TranslatableText("panorama_tweaker.verticalAngle"), x,
-                        y, 308, 20, Config.DEFAULT_VERTICAL_ANGLE, PanoramaTweaker.config.verticalAngle, -90, 90,
-                        val -> PanoramaTweaker.config.verticalAngle = val)).children());
+        for (ClickableWidget child : ((new OptionWidget(this.textRenderer,
+                new TranslatableText("panorama_tweaker.verticalAngle"), x, y, 308, 20, Config.DEFAULT_VERTICAL_ANGLE,
+                PanoramaTweaker.config.verticalAngle, -90, 90, val -> PanoramaTweaker.config.verticalAngle = val))
+                        .children())) {
+            this.addDrawableChild(child);
+        }
 
         y = ((this.height - widgetPadding) * 3) / widgetCount + y_padding;
-        this.children.addAll((new OptionWidget(this.textRenderer, new TranslatableText("panorama_tweaker.swayAngle"), x,
-                y, 308, 20, Config.DEFAULT_SWAY_ANGLE, PanoramaTweaker.config.swayAngle, -90, 90,
-                val -> PanoramaTweaker.config.swayAngle = val)).children());
+        for (ClickableWidget child : ((new OptionWidget(this.textRenderer,
+                new TranslatableText("panorama_tweaker.swayAngle"), x, y, 308, 20, Config.DEFAULT_SWAY_ANGLE,
+                PanoramaTweaker.config.swayAngle, -90, 90, val -> PanoramaTweaker.config.swayAngle = val))
+                        .children())) {
+            this.addDrawableChild(child);
+        }
 
         y = ((this.height - widgetPadding) * 4) / widgetCount + y_padding;
-        this.children.addAll((new OptionWidget(this.textRenderer, new TranslatableText("panorama_tweaker.swaySpeed"), x,
-                y, 308, 20, Config.DEFAULT_SWAY_SPEED, PanoramaTweaker.config.swaySpeed, 0, 10,
-                val -> PanoramaTweaker.config.swaySpeed = val)).children());
+        for (ClickableWidget child : ((new OptionWidget(this.textRenderer,
+                new TranslatableText("panorama_tweaker.swaySpeed"), x, y, 308, 20, Config.DEFAULT_SWAY_SPEED,
+                PanoramaTweaker.config.swaySpeed, 0, 10, val -> PanoramaTweaker.config.swaySpeed = val)).children())) {
+            this.addDrawableChild(child);
+        }
 
         y = ((this.height - widgetPadding) * 5) / widgetCount + y_padding;
-        this.children.addAll(
-                (new OptionWidget(this.textRenderer, new TranslatableText("panorama_tweaker.initialSwayProgress"), x, y,
-                        308, 20, Config.DEFAULT_INITIAL_SWAY_PROGRESS, PanoramaTweaker.config.initialSwayProgress, -1,
-                        1, val -> PanoramaTweaker.config.initialSwayProgress = val)).children());
+        for (ClickableWidget child : ((new OptionWidget(this.textRenderer,
+                new TranslatableText("panorama_tweaker.initialSwayProgress"), x, y, 308, 20,
+                Config.DEFAULT_INITIAL_SWAY_PROGRESS, PanoramaTweaker.config.initialSwayProgress, -1, 1,
+                val -> PanoramaTweaker.config.initialSwayProgress = val)).children())) {
+            this.addDrawableChild(child);
+        }
     }
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.backgroundRenderer.render(delta, MathHelper.clamp(1, 0.0F, 1.0F));
-        for (Element child : this.children) {
+        for (Element child : this.children()) {
             if (child instanceof Drawable) {
                 ((Drawable) child).render(matrices, mouseX, mouseY, delta);
             }
@@ -103,10 +115,10 @@ public class ConfigScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        for (Element child : this.children) {
-            if (child instanceof AbstractButtonWidget) {
-                if (((AbstractButtonWidget) child).isFocused()) {
-                    ((AbstractButtonWidget) child).changeFocus(false);
+        for (Element child : this.children()) {
+            if (child instanceof ClickableWidget) {
+                if (((ClickableWidget) child).isFocused()) {
+                    ((ClickableWidget) child).changeFocus(false);
                 }
             }
         }
@@ -121,10 +133,10 @@ public class ConfigScreen extends Screen {
         PanoramaTweaker.config.save();
     }
 
-    protected class OptionWidget extends AbstractParentElement {
+    protected class OptionWidget {
         private final double defaultVal;
 
-        private final List<AbstractButtonWidget> children;
+        private final List<ClickableWidget> children;
         private final OptionSlider slider;
         private final TextFieldWidget textField;
         private final ButtonWidget resetButton;
@@ -158,12 +170,11 @@ public class ConfigScreen extends Screen {
                     this.textField.setUneditableColor(0xFF0000);
                 }
             });
-            this.setFocused(this.textField);
             this.resetButton = new ButtonWidget(x + width - 50, y, 50, height, new TranslatableText("controls.reset"),
                     (buttonWidget) -> {
                         this.resetToDefault();
                     });
-            this.children = new ArrayList<AbstractButtonWidget>();
+            this.children = new ArrayList<ClickableWidget>();
             this.children.add(this.slider);
             this.children.add(this.textField);
             this.children.add(this.resetButton);
@@ -193,8 +204,7 @@ public class ConfigScreen extends Screen {
             return this.value == this.defaultVal;
         }
 
-        @Override
-        public List<? extends Element> children() {
+        public List<ClickableWidget> children() {
             return this.children;
         }
 
