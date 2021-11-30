@@ -42,12 +42,12 @@ public class ConfigScreen extends Screen {
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 154, this.height - y_padding, 150, 20,
                 new TranslatableText("gui.cancel"), (button) -> {
                     this.restoreConfig();
-                    client.openScreen(parent);
+                    client.setScreen(parent);
                 }));
         this.addDrawableChild(new ButtonWidget(this.width / 2 + 4, this.height - y_padding, 150, 20,
                 new TranslatableText("gui.done"), (button) -> {
                     this.saveConfig();
-                    client.openScreen(parent);
+                    client.setScreen(parent);
                 }));
 
         final int widgetCount = 6;
