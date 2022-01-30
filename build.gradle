@@ -15,6 +15,12 @@ repositories {
 		name = 'Terraformers'
 		url = 'https://maven.terraformersmc.com/releases/'
 	}
+	maven {
+		url "https://cursemaven.com"
+		content {
+			includeGroup "curse.maven"
+		}
+	}
 }
 
 dependencies {
@@ -26,6 +32,7 @@ dependencies {
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
 		transitive = false
 	}
+	compileOnly "curse.maven:bedrockify-403858:${project.bedrockify_file}"
 }
 
 processResources {
