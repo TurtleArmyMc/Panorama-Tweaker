@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
+import net.minecraft.util.math.MathHelper;
 import org.apache.logging.log4j.Level;
 
 import net.fabricmc.loader.api.FabricLoader;
@@ -78,5 +79,13 @@ public class Config {
             PanoramaTweaker.LOGGER.error(e.getMessage(), e);
             return false;
         }
+    }
+
+	public float calcDrawX(float time) {
+        return MathHelper.sin((time * swaySpeed * 0.001F) - ((float) Math.PI * initialSwayProgress)) * swayAngle - verticalAngle;
+	}
+
+    public float calcDrawY(float time) {
+        return -time * 0.1F * rotationSpeed - startingHorizontalAngle;
     }
 }

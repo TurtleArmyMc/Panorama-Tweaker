@@ -17,9 +17,7 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
 @Environment(EnvType.CLIENT)
@@ -29,7 +27,7 @@ public class ConfigScreen extends Screen {
     private final Config backupConfig;
 
     protected ConfigScreen(Screen parent) {
-        super(new TranslatableText("panorama_tweaker.title"));
+        super(Text.translatable("panorama_tweaker.title"));
         this.backgroundRenderer = new RotatingCubeMapRenderer(TitleScreen.PANORAMA_CUBE_MAP);
         this.parent = parent;
         this.backupConfig = new Config(PanoramaTweaker.config);
@@ -40,12 +38,12 @@ public class ConfigScreen extends Screen {
         final int y_padding = 28;
 
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 154, this.height - y_padding, 150, 20,
-                new TranslatableText("gui.cancel"), (button) -> {
+                Text.translatable("gui.cancel"), (button) -> {
                     this.restoreConfig();
                     client.setScreen(parent);
                 }));
         this.addDrawableChild(new ButtonWidget(this.width / 2 + 4, this.height - y_padding, 150, 20,
-                new TranslatableText("gui.done"), (button) -> {
+                Text.translatable("gui.done"), (button) -> {
                     this.saveConfig();
                     client.setScreen(parent);
                 }));
@@ -57,7 +55,7 @@ public class ConfigScreen extends Screen {
         int y = ((this.height - widgetPadding) * 0) / widgetCount + y_padding;
 
         for (ClickableWidget child : (new OptionWidget(this.textRenderer,
-                new TranslatableText("panorama_tweaker.rotationSpeed"), x, y, 308, 20, Config.DEFAULT_ROTATION_SPEED,
+                Text.translatable("panorama_tweaker.rotationSpeed"), x, y, 308, 20, Config.DEFAULT_ROTATION_SPEED,
                 PanoramaTweaker.config.rotationSpeed, -10, 10, val -> PanoramaTweaker.config.rotationSpeed = val))
                         .children()) {
             this.addDrawableChild(child);
@@ -65,7 +63,7 @@ public class ConfigScreen extends Screen {
 
         y = ((this.height - widgetPadding) * 1) / widgetCount + y_padding;
         for (ClickableWidget child : ((new OptionWidget(this.textRenderer,
-                new TranslatableText("panorama_tweaker.startingHorizontalAngle"), x, y, 308, 20,
+                Text.translatable("panorama_tweaker.startingHorizontalAngle"), x, y, 308, 20,
                 Config.DEFAULT_STARTING_HORIZONTAL_ANGLE, PanoramaTweaker.config.startingHorizontalAngle, -180, 180,
                 val -> PanoramaTweaker.config.startingHorizontalAngle = val)).children())) {
             this.addDrawableChild(child);
@@ -73,7 +71,7 @@ public class ConfigScreen extends Screen {
 
         y = ((this.height - widgetPadding) * 2) / widgetCount + y_padding;
         for (ClickableWidget child : ((new OptionWidget(this.textRenderer,
-                new TranslatableText("panorama_tweaker.verticalAngle"), x, y, 308, 20, Config.DEFAULT_VERTICAL_ANGLE,
+                Text.translatable("panorama_tweaker.verticalAngle"), x, y, 308, 20, Config.DEFAULT_VERTICAL_ANGLE,
                 PanoramaTweaker.config.verticalAngle, -90, 90, val -> PanoramaTweaker.config.verticalAngle = val))
                         .children())) {
             this.addDrawableChild(child);
@@ -81,7 +79,7 @@ public class ConfigScreen extends Screen {
 
         y = ((this.height - widgetPadding) * 3) / widgetCount + y_padding;
         for (ClickableWidget child : ((new OptionWidget(this.textRenderer,
-                new TranslatableText("panorama_tweaker.swayAngle"), x, y, 308, 20, Config.DEFAULT_SWAY_ANGLE,
+                Text.translatable("panorama_tweaker.swayAngle"), x, y, 308, 20, Config.DEFAULT_SWAY_ANGLE,
                 PanoramaTweaker.config.swayAngle, -90, 90, val -> PanoramaTweaker.config.swayAngle = val))
                         .children())) {
             this.addDrawableChild(child);
@@ -89,14 +87,14 @@ public class ConfigScreen extends Screen {
 
         y = ((this.height - widgetPadding) * 4) / widgetCount + y_padding;
         for (ClickableWidget child : ((new OptionWidget(this.textRenderer,
-                new TranslatableText("panorama_tweaker.swaySpeed"), x, y, 308, 20, Config.DEFAULT_SWAY_SPEED,
+                Text.translatable("panorama_tweaker.swaySpeed"), x, y, 308, 20, Config.DEFAULT_SWAY_SPEED,
                 PanoramaTweaker.config.swaySpeed, 0, 10, val -> PanoramaTweaker.config.swaySpeed = val)).children())) {
             this.addDrawableChild(child);
         }
 
         y = ((this.height - widgetPadding) * 5) / widgetCount + y_padding;
         for (ClickableWidget child : ((new OptionWidget(this.textRenderer,
-                new TranslatableText("panorama_tweaker.initialSwayProgress"), x, y, 308, 20,
+                Text.translatable("panorama_tweaker.initialSwayProgress"), x, y, 308, 20,
                 Config.DEFAULT_INITIAL_SWAY_PROGRESS, PanoramaTweaker.config.initialSwayProgress, -1, 1,
                 val -> PanoramaTweaker.config.initialSwayProgress = val)).children())) {
             this.addDrawableChild(child);
@@ -118,7 +116,7 @@ public class ConfigScreen extends Screen {
         for (Element child : this.children()) {
             if (child instanceof ClickableWidget) {
                 if (((ClickableWidget) child).isFocused()) {
-                    ((ClickableWidget) child).changeFocus(false);
+                    child.changeFocus(false);
                 }
             }
         }
@@ -133,7 +131,7 @@ public class ConfigScreen extends Screen {
         PanoramaTweaker.config.save();
     }
 
-    protected class OptionWidget {
+    protected static class OptionWidget {
         private final double defaultVal;
 
         private final List<ClickableWidget> children;
@@ -145,15 +143,16 @@ public class ConfigScreen extends Screen {
 
         private double value;
 
-        public OptionWidget(TextRenderer font, TranslatableText text, int x, int y, int width, int height,
+        public OptionWidget(TextRenderer font, Text text, int x, int y, int width, int height,
                 double defaultVal, double progress, double scaledMin, double scaledMax, Consumer<Float> setter) {
             this.defaultVal = defaultVal;
             this.value = progress;
 
             this.setter = setter;
 
-            this.slider = new OptionSlider(text, x, y, width - 110, height, progress, scaledMin, scaledMax,
-                    (val) -> this.setValue(val));
+            this.slider = new OptionSlider(
+                text, x, y, width - 110, height, progress, scaledMin, scaledMax, this::setValue
+            );
             this.textField = new TextFieldWidget(font, x + width - 105, y, 50, height, text);
             this.textField.setText("" + (Math.round(this.value * 100) / 100d));
             this.textField.setEditable(true);
@@ -170,11 +169,10 @@ public class ConfigScreen extends Screen {
                     this.textField.setUneditableColor(0xFF0000);
                 }
             });
-            this.resetButton = new ButtonWidget(x + width - 50, y, 50, height, new TranslatableText("controls.reset"),
-                    (buttonWidget) -> {
-                        this.resetToDefault();
-                    });
-            this.children = new ArrayList<ClickableWidget>();
+            this.resetButton = new ButtonWidget(x + width - 50, y, 50, height, Text.translatable("controls.reset"),
+                    (buttonWidget) -> this.resetToDefault()
+            );
+            this.children = new ArrayList<>();
             this.children.add(this.slider);
             this.children.add(this.textField);
             this.children.add(this.resetButton);
@@ -208,17 +206,17 @@ public class ConfigScreen extends Screen {
             return this.children;
         }
 
-        protected class OptionSlider extends SliderWidget {
-            protected final MutableText text;
+        protected static class OptionSlider extends SliderWidget {
+            protected final Text text;
             protected final double scaledMin;
             protected final double scaledMax;
             protected final double scaledRange;
             protected final Consumer<Double> onUpdate;
             protected double scaledValue;
 
-            public OptionSlider(MutableText text, int x, int y, int width, int height, double progress,
+            public OptionSlider(Text text, int x, int y, int width, int height, double progress,
                     double scaledMin, double scaledMax, Consumer<Double> onUpdate) {
-                super(x, y, width, height, LiteralText.EMPTY,
+                super(x, y, width, height, Text.empty(),
                         MathHelper.clamp(((progress - scaledMin) / (scaledMax - scaledMin)), 0, 1));
                 this.text = text;
                 this.scaledMin = scaledMin;
