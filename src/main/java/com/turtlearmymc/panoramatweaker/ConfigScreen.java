@@ -37,16 +37,19 @@ public class ConfigScreen extends Screen {
     protected void init() {
         final int y_padding = 28;
 
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 154, this.height - y_padding, 150, 20,
-                Text.translatable("gui.cancel"), (button) -> {
-                    this.restoreConfig();
-                    client.setScreen(parent);
-                }));
-        this.addDrawableChild(new ButtonWidget(this.width / 2 + 4, this.height - y_padding, 150, 20,
-                Text.translatable("gui.done"), (button) -> {
-                    this.saveConfig();
-                    client.setScreen(parent);
-                }));
+        ButtonWidget.builder(Text.translatable("gui.done"), (button) -> {
+            this.saveConfig();
+            client.setScreen(parent);
+        }).position(this.width / 2 + 4, this.height - y_padding).size(150, 20).build();
+
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("gui.cancel"), (button) -> {
+            this.restoreConfig();
+            client.setScreen(parent);
+        }).position(this.width / 2 - 154, this.height - y_padding).size(150, 20).build());
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("gui.done"), (button) -> {
+            this.saveConfig();
+            client.setScreen(parent);
+        }).position(this.width / 2 + 4, this.height - y_padding).size(150, 20).build());
 
         final int widgetCount = 6;
         final int widgetPadding = 76;
@@ -169,9 +172,8 @@ public class ConfigScreen extends Screen {
                     this.textField.setUneditableColor(0xFF0000);
                 }
             });
-            this.resetButton = new ButtonWidget(x + width - 50, y, 50, height, Text.translatable("controls.reset"),
-                    (buttonWidget) -> this.resetToDefault()
-            );
+            this.resetButton = ButtonWidget.builder(Text.translatable("controls.reset"),
+                    (buttonWidget) -> this.resetToDefault()).position(x + width - 50, y).size(50, height).build();
             this.children = new ArrayList<>();
             this.children.add(this.slider);
             this.children.add(this.textField);
