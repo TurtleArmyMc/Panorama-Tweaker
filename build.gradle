@@ -32,7 +32,8 @@ dependencies {
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
 		transitive = false
 	}
-	compileOnly "curse.maven:bedrockify-403858:${project.bedrockify_file}"
+//	compileOnly "curse.maven:bedrockify-403858:${project.bedrockify_file}"
+//	modImplementation("curse.maven:bedrockify-403858:${project.bedrockify_file}")
 }
 
 processResources {

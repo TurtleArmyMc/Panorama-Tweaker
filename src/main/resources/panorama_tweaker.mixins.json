@@ -4,8 +4,8 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [],
   "client": [
-    "RotatingCubeMapRendererMixin",
-    "compat.BedrockifyRotatingCubeMapRendererMixin"
+    "RotatingCubeMapRendererMixin"//,
+//    "compat.BedrockifyRotatingCubeMapRendererMixin"
   ],
   "server": [],
   "injectors": {

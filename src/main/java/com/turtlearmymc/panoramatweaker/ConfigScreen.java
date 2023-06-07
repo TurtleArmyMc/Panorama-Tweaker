@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.RotatingCubeMapRenderer;
@@ -105,11 +106,11 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.backgroundRenderer.render(delta, MathHelper.clamp(1, 0.0F, 1.0F));
         for (Element child : this.children()) {
             if (child instanceof Drawable) {
-                ((Drawable) child).render(matrices, mouseX, mouseY, delta);
+                ((Drawable) child).render(context, mouseX, mouseY, delta);
             }
         }
     }
@@ -119,7 +120,7 @@ public class ConfigScreen extends Screen {
         for (Element child : this.children()) {
             if (child instanceof ClickableWidget) {
                 if (((ClickableWidget) child).isFocused()) {
-                    child.changeFocus(false);
+                    child.setFocused(false);
                 }
             }
         }
