@@ -29,7 +29,7 @@ public class ConfigScreen extends Screen {
 
     protected ConfigScreen(Screen parent) {
         super(Text.translatable("panorama_tweaker.title"));
-        this.backgroundRenderer = new RotatingCubeMapRenderer(TitleScreen.PANORAMA_CUBE_MAP);
+        this.backgroundRenderer = new RotatingCubeMapRenderer(TitleScreen.PANORAMA_RENDERER);
         this.parent = parent;
         this.backupConfig = new Config(PanoramaTweaker.config);
     }
@@ -107,7 +107,7 @@ public class ConfigScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.backgroundRenderer.render(delta, MathHelper.clamp(1, 0.0F, 1.0F));
+        this.backgroundRenderer.render(context, this.width, this.height, delta, MathHelper.clamp(1, 0.0F, 1.0F));
         for (Element child : this.children()) {
             if (child instanceof Drawable) {
                 ((Drawable) child).render(context, mouseX, mouseY, delta);
